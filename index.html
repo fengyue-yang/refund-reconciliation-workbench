@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>退款比对工作台 · 作品集演示</title>
+  <style>
+    :root{--navy:#102c3a;--ink:#162733;--muted:#495e70;--teal:#0b655d;--line:#cbd8e4}
+    *{box-sizing:border-box}body{margin:0;background:#eaf1f7;color:var(--ink);font:15px/1.55 "Microsoft YaHei UI","Microsoft YaHei","Segoe UI",sans-serif}
+    .shell{min-height:100vh;display:grid;grid-template-columns:224px minmax(0,1fr)}
+    aside{background:var(--navy);color:#e6eef4;padding:20px 14px}
+    .brand{display:flex;align-items:center;gap:10px;margin:0 0 28px}.brand b{color:#f0b741;font-size:33px;letter-spacing:-.12em;margin-right:5px}.brand strong,.brand small{display:block}.brand small,aside p{color:#bfd0d9}
+    nav{display:grid;gap:6px}nav button{text-align:left;border:0;color:inherit;background:none;font:inherit;font-weight:500}nav button[aria-current]{background:var(--teal);box-shadow:inset 3px 0 #8be1cb}
+    main{min-width:0;padding:24px clamp(16px,3vw,40px) 42px}header{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);margin-bottom:18px;padding-bottom:14px}h1,h2,p{margin:0}h1{font-size:clamp(21px,3vw,29px)}h2{font-size:18px}.mode{padding:5px 10px;border:1px solid #8cb7b3;border-radius:8px;color:var(--teal);white-space:nowrap}
+    .intro{color:var(--muted);margin-bottom:14px}.card{border:1px solid var(--line);background:white;border-radius:10px;padding:16px 18px;margin:12px 0}.heading,.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}.actions{margin-top:14px}
+    .input-row{display:grid;grid-template-columns:minmax(125px,1fr) minmax(0,1fr) auto;align-items:center;gap:9px 15px;border-top:1px solid #e2e9f0;min-height:54px;margin-top:6px}.input-row label{display:contents}.input-row input{position:absolute;width:1px;height:1px;clip-path:inset(50%)} .input-row label:focus-within .pick{outline:2px solid var(--teal);outline-offset:2px}
+    button,.pick{appearance:none;cursor:pointer;font:inherit;font-weight:600;display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:7px 12px;border:1px solid #8db8b3;border-radius:8px;color:var(--teal);background:#fff}nav button{justify-content:flex-start}button:hover,.pick:hover{background:#e5f4f0}button.primary{background:var(--teal);color:#fff;border-color:var(--teal)}button:disabled{opacity:.5;cursor:not-allowed}button:focus-visible{outline:2px solid #198d82;outline-offset:3px}
+    .file-name,.status{color:var(--muted);overflow-wrap:anywhere}.status[data-error]{color:#963426}.metrics{display:flex;gap:22px;flex-wrap:wrap;margin:13px 0}.metrics b{display:block;font-size:23px;color:var(--teal)}
+    .table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:450px}th,td{text-align:left;padding:9px 10px;border-bottom:1px solid #e2e9f0}th{background:#e8eff6}.money{font-variant-numeric:tabular-nums;text-align:right}
+    .flow{display:grid;gap:10px;padding-left:20px}[hidden]{display:none!important}
+    @media(max-width:690px){.shell{display:block}aside{padding:12px 16px}.brand{margin-bottom:8px}nav{display:flex;gap:8px;flex-wrap:wrap}.input-row{grid-template-columns:minmax(0,1fr) auto}.file-name{grid-column:1;grid-row:2}.pick{grid-column:2;grid-row:1/span 2}.card{padding:13px}}
+  </style>
+  <script src="demo.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand"><b aria-hidden="true">CW</b><div><strong>退款比对工作台</strong><small>公开作品集</small></div></div>
+      <nav aria-label="演示导航">
+        <button type="button" data-target="overview">工作台概览</button>
+        <button type="button" data-target="compare" aria-current="page">线上退款比对</button>
+      </nav>
+    </aside>
+    <main>
+      <header><h1 id="page-heading">线上退款比对</h1><span class="mode">合成数据演示</span></header>
+      <section id="overview" hidden>
+        <p class="intro">财务对账工具的公开作品集，展示从选择文件到导出复核清单的核心流程。</p>
+        <div class="card">
+          <h2>正式工作台的功能范围</h2>
+          <ul class="flow"><li>ERP 合并拆分及线上、线下退款比对</li><li>退款结果核查与 ERP 线上明细补入</li><li>线上拍单核验、退预收比对和人工复核</li><li>规则版本和运行记录</li></ul>
+          <button class="primary" type="button" data-target="compare">进入比对演示</button>
+        </div>
+      </section>
+      <section id="compare">
+        <p class="intro">用虚构订单核对退款记录与平台流水。可载入样例，或选择自己的虚构 CSV。</p>
+        <form id="compare-form" class="card">
+          <div class="heading"><h2>上传文件</h2><button id="use-sample" type="button">载入演示数据</button></div>
+          <div class="input-row">
+            <label><strong>退款管理明细</strong><input id="refunds" type="file" accept=".csv,text/csv" aria-label="选择上传退款管理明细"><span class="file-name" id="refunds-label">未选择文件</span><span class="pick" aria-hidden="true">选择上传</span></label>
+          </div>
+          <div class="input-row">
+            <label><strong>平台退款流水</strong><input id="flows" type="file" accept=".csv,text/csv" aria-label="选择上传平台退款流水"><span class="file-name" id="flows-label">未选择文件</span><span class="pick" aria-hidden="true">选择上传</span></label>
+          </div>
+          <div class="actions">
+            <button id="download-inputs" type="button">下载样例输入</button>
+            <button id="run" class="primary" type="submit" disabled>开始比对</button>
+          </div>
+          <p id="status" class="status" role="status">请选择两份 CSV，或载入演示数据。</p>
+        </form>
+        <section id="results" class="card" aria-labelledby="results-heading" hidden>
+          <div class="heading"><h2 id="results-heading">比对完成</h2><button id="download-results" class="primary" type="button">下载 CSV</button></div>
+          <div class="metrics" id="metrics"></div>
+          <div class="table-wrap"><table><thead><tr><th>订单号</th><th class="money">退款金额</th><th class="money">流水金额</th><th>核对结果</th></tr></thead><tbody id="rows"></tbody></table></div>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
